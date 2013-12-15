@@ -3,6 +3,7 @@ package com.robotsandpencils.carousel;
 import android.content.Context;
 import android.graphics.Camera;
 import android.graphics.Matrix;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.util.SparseIntArray;
@@ -41,6 +42,7 @@ public class Carousel extends FrameLayout {
     private float stretchX = 1.0f;
     private Scroller scroller;
     private GestureDetector detector;
+    private boolean mDetectedFling;
 
     public Carousel(Context context) {
         super(context);
@@ -85,7 +87,6 @@ public class Carousel extends FrameLayout {
                 //scroller.startScroll((int)rotation,0,(int)distanceX,0);
                 //scroller.setFinalX((int)distanceX);
                 //scroller.extendDuration(20000);
-
                 rotation += distanceX / getWidth() * 5;
                 return true;
             }
@@ -99,13 +100,10 @@ public class Carousel extends FrameLayout {
             @DebugLog
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-//                if (e2.getAction() == MotionEvent.ACTION_UP) {
-//                    animator.end();
-//                }
                 //scroller.fling(0,0,(int)velocityX,0,0,Integer.MAX_VALUE,0,0);
-                //scroller.extendDuration(750);
-                return false;
+                //scroller.extendDuration(1000);
+                //mDetectedFling = true;
+                return true;
             }
         });
         setStaticTransformationsEnabled(true);
@@ -117,21 +115,27 @@ public class Carousel extends FrameLayout {
             @Override
             public void onTimeUpdate(TimeAnimator timeAnimator, long l, long l2) {
 
-//                if (scroller.computeScrollOffset()) {
-//                    rotation = -1 * scroller.getCurrX();
+                if (mDetectedFling && scroller.computeScrollOffset()) {
+                    rotation += -1 * scroller.getCurrX() / 100000.0;
+                } else {
+                    if (mDetectedFling) {
+                        mDetectedFling = false;
+                        animator.end();
+                    }
+                }
 
-                    if (animator.isRunning()) {
+                if (animator.isRunning()) {
                     for (int i = 0; i < getChildCount(); i++) {
                         getChildAt(i).invalidate();
                     }
 
                     requestLayout();
-                    }
-//                }
-
+                }
             }
         });
-        TimeAnimator.setFrameDelay((long)(1000.0/120.0));
+        TimeAnimator.setFrameDelay((long) (1000.0 / 120.0));
+
+        ViewCompat.postInvalidateOnAnimation(this);
 
         //animator.start();
     }
@@ -172,6 +176,7 @@ public class Carousel extends FrameLayout {
         int index;
         float z;
     }
+
     ArrayList<ItemIndex> items = new ArrayList<ItemIndex>();
     private Comparator<ItemIndex> comparator = new Comparator<ItemIndex>() {
         @Override
@@ -186,12 +191,12 @@ public class Carousel extends FrameLayout {
 
         if (items.size() != getChildCount()) {
             items.clear();
-            for(int i = 0; i < getChildCount(); i++)
+            for (int i = 0; i < getChildCount(); i++)
                 items.add(new ItemIndex());
         }
         for (int i = 0; i < getChildCount(); i++) {
             items.get(i).index = i;
-            items.get(i).z = ((CarouselItem)getChildAt(i)).getZ();
+            items.get(i).z = ((CarouselItem) getChildAt(i)).getZ();
         }
 
         Collections.sort(items, comparator);
@@ -260,11 +265,12 @@ public class Carousel extends FrameLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if (event.getAction() == MotionEvent.ACTION_UP)
+        boolean retval = detector.onTouchEvent(event);
+
+        if (event.getAction() == MotionEvent.ACTION_UP && scroller.isFinished())
             animator.end();
         else if (event.getAction() == MotionEvent.ACTION_DOWN)
             animator.start();
-        return detector.onTouchEvent(event);
         /*
         stopped = !stopped;
         if (stopped) {
@@ -275,6 +281,8 @@ public class Carousel extends FrameLayout {
         }
         return super.onTouchEvent(event);
         */
+
+        return retval;
     }
 
 }

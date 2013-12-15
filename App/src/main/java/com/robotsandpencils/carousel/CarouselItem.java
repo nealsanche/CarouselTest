@@ -17,7 +17,7 @@ public class CarouselItem extends FrameLayout {
     private float z;
     private ImageView mImage;
     private ImageView mBlurImage;
-    private float scale = 0.4f;
+    private float scale = 1.0f;
     private float maxZ = 100;
     private BlurMode blurMode = BlurMode.TO_BACK;
     private float imageRotation;
@@ -57,6 +57,8 @@ public class CarouselItem extends FrameLayout {
         mBlurImage.setImageBitmap(Blur.fastblur(getContext(), b, 25));
 
         mBlurImage.setDrawingCacheEnabled(true);
+
+        ViewHelper.setRotation(mBlurImage, getImageRotation());
 
         addView(mImage);
         addView(mBlurImage);
