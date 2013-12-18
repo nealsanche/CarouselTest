@@ -51,14 +51,16 @@ public class CarouselItem extends FrameLayout {
         mBlurImage = new ImageView(getContext());
 
         Bitmap b = mImage.getDrawingCache();
-        mImage.setImageBitmap(b);
+        //mImage.setImageBitmap(b);
 
         // Calculate the blurred version of the bitmap too
         mBlurImage.setImageBitmap(Blur.fastblur(getContext(), b, 25));
 
-        mBlurImage.setDrawingCacheEnabled(true);
+        mBlurImage.setDrawingCacheEnabled(false);
 
         ViewHelper.setRotation(mBlurImage, getImageRotation());
+
+        mImage.setDrawingCacheEnabled(false);
 
         addView(mImage);
         addView(mBlurImage);

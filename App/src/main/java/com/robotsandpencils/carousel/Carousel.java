@@ -21,8 +21,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import hugo.weaving.DebugLog;
-
 /**
  * Created by neal on 12/14/2013.
  */
@@ -63,25 +61,21 @@ public class Carousel extends FrameLayout {
         scroller = new Scroller(getContext());
 
         detector = new GestureDetector(getContext(), new GestureDetector.OnGestureListener() {
-            @DebugLog
             @Override
             public boolean onDown(MotionEvent e) {
                 return true;
             }
 
-            @DebugLog
             @Override
             public void onShowPress(MotionEvent e) {
 
             }
 
-            @DebugLog
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
                 return true;
             }
 
-            @DebugLog
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 //scroller.startScroll((int)rotation,0,(int)distanceX,0);
@@ -91,13 +85,11 @@ public class Carousel extends FrameLayout {
                 return true;
             }
 
-            @DebugLog
             @Override
             public void onLongPress(MotionEvent e) {
 
             }
 
-            @DebugLog
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 //scroller.fling(0,0,(int)velocityX,0,0,Integer.MAX_VALUE,0,0);
@@ -129,11 +121,11 @@ public class Carousel extends FrameLayout {
                         getChildAt(i).invalidate();
                     }
 
-                    requestLayout();
+                    //requestLayout();
                 }
             }
         });
-        TimeAnimator.setFrameDelay((long) (1000.0 / 120.0));
+        TimeAnimator.setFrameDelay((long) (1000.0 / 30.0));
 
         ViewCompat.postInvalidateOnAnimation(this);
 
@@ -267,10 +259,11 @@ public class Carousel extends FrameLayout {
 
         boolean retval = detector.onTouchEvent(event);
 
-        if (event.getAction() == MotionEvent.ACTION_UP && scroller.isFinished())
+        if (event.getAction() == MotionEvent.ACTION_UP && scroller.isFinished()) {
             animator.end();
-        else if (event.getAction() == MotionEvent.ACTION_DOWN)
+        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
             animator.start();
+        }
         /*
         stopped = !stopped;
         if (stopped) {

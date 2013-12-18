@@ -36,7 +36,7 @@ public class MainActivity extends ActionBarActivity {
         Carousel carousel = (Carousel)findViewById(R.id.carousel);
 
         carousel.setStretchZ(1f);
-        carousel.setStretchX(1.1f);
+        carousel.setStretchX(1.0f);
         carousel.setTiltAngleZ(70);
         carousel.setTiltAngleY(20);
 /*
@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
         for (int i = 0; i < 5; i++) {
             final CarouselItem child = new CarouselItem(this);
             child.setImageRotation(-10);
-            child.setScale(0.5f);
+            child.setScale(0.3f);
             child.setBlurMode(BlurMode.TO_BACK);
             ImageView image = new ImageView(this);
             image.setImageDrawable(getResources().getDrawable(R.drawable.img_649));
