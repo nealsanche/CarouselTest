@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="ComJakewhartonHugoHugoRuntime100.aar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/App/build/exploded-bundles/ComJakewhartonHugoHugoRuntime100.aar/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/App/build/exploded-bundles/ComJakewhartonHugoHugoRuntime100.aar/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
